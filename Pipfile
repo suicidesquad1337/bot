@@ -20,4 +20,6 @@ python_version = "3.9"
 
 [scripts]
 bot = "python -m bot"
+lint = "pre-commit run --all-files"
+precommit = "pre-commit install"
 
