@@ -1,13 +1,15 @@
 import discord
 from discord.ext import commands
 
+from .utils import config
+
 
 class SquadBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def run(self):
-        super().run("Redacted")  # TODO: Load token from config.
+        super().run(config.get_token())
 
     async def on_ready(self):
         print(f"Logged in as {self.user.name}")

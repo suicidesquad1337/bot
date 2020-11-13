@@ -148,6 +148,3 @@ Thumbs.db
 .idea/
 .vscode/
 .vs/
-
-# Bot configuration
-/config.y[a]ml

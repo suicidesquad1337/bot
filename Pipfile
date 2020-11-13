@@ -11,6 +11,7 @@ pre-commit = "*"
 
 [packages]
 "discord.py" = "~=1.5.1"
+python-dotenv = "~=0.15.0"
 
 [pipenv]
 allow_prereleases = true
