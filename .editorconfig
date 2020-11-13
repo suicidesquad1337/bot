@@ -15,7 +15,7 @@ trim_trailing_whitespace = true
 [*.{md,rst}]
 trim_trailing_whitespace = false
 
-[*.{toml,yml}]
+[*.{toml,yml,yaml}]
 indent_size = 2
 
 [Makefile]

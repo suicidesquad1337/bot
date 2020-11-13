@@ -4,8 +4,20 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+black = "*"
+flake8 = "*"
+isort = "*"
+pre-commit = "*"
 
 [packages]
+"discord.py" = "~=1.5.1"
+
+[pipenv]
+allow_prereleases = true
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"
+
+[scripts]
+bot = "python -m bot"
+
