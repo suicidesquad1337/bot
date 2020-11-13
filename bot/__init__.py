@@ -1,0 +1,1 @@
+from .squadbot import SquadBot

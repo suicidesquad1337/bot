@@ -1,9 +1,23 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import discord
+from discord.ext.commands import when_mentioned_or
 
-from .squadbot import Bot
+from . import SquadBot
 
-bot = Bot()
+# Configure Discord gateway intents which should be used by the bot.
+intents = discord.Intents.default()
+intents.members = True
+intents.typing = False
+intents.dm_typing = False
+intents.invites = False
+intents.webhooks = False
+intents.integrations = False
 
-if __name__ == "__main__":
-    bot.run()
+# Instantiate and prepare the bot instance.
+bot = SquadBot(
+    command_prefix=when_mentioned_or("!"),  # TODO: Prefix from config.
+    case_insensitive=True,
+    max_messages=10_000,
+    intents=intents,
+)
+
+bot.run()
