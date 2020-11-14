@@ -12,7 +12,6 @@ pre-commit = "*"
 [packages]
 "discord.py" = "~=1.5.1"
 gino = "~=1.0.1"
-python-dotenv = "~=0.15.0"
 uvloop = { version = "~=0.14.0", sys_platform = "!= 'win32'" }
 
 [pipenv]

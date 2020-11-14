@@ -19,9 +19,6 @@ finally:
 
 ROOT = Path(__file__).parent.parent
 
-# Source in bot configuration variables from .env in the project root.
-config.load_config(ROOT)
-
 
 async def initialize_database() -> Gino:
     connection = await db.create_connection()
