@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from gino import Gino
 
+from . import db
 from .utils import config
 
 
@@ -10,6 +11,10 @@ class SquadBot(commands.Bot):
         super().__init__(*args, **kwargs)
 
         self.db = db
+
+    async def close(self):
+        await db.close_connection(self.db)
+        await super().close()
 
     def run(self):
         super().run(config.get_token())
