@@ -4,9 +4,9 @@ services:
   postgres:
     image: postgres:12-alpine
     environment:
-      POSTGRES_USER: squadbot
-      POSTGRES_PASSWORD: squadbot
-      POSTGRES_DB: squadbot
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
 
   bot:
     build:
@@ -21,4 +21,4 @@ services:
     environment:
       DISCORD_PREFIXES: ${DISCORD_PREFIXES}
       DISCORD_TOKEN: ${DISCORD_TOKEN}
-      DATABASE_URL: postgresql+asyncpg://squadbot:squadbot@postgres:5432/squadbot
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
