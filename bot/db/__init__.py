@@ -1,7 +1,10 @@
+# Hide away the schema function from module exports.
+# We only need to import them so that Gino takes note of them.
 __all__ = (
-    "create_connection",
+    "DATABASE",
     "close_connection",
-    "do_migrate",
+    "init_connection",
 )
 
-from .connection import close_connection, create_connection, do_migrate
+from .connection import DATABASE, close_connection, init_connection
+from .schema import *  # noqa

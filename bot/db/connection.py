@@ -2,17 +2,12 @@ from gino import Gino
 
 from ..utils import config
 
-
-async def create_connection() -> Gino:
-    db = Gino()
-    await db.set_bind(config.get_database_url())
-
-    return db
+DATABASE = Gino()
 
 
-async def close_connection(db: Gino):
-    await db.pop_bind().close()
+async def init_connection():
+    await DATABASE.set_bind(config.get_database_url())
 
 
-async def do_migrate(db: Gino):
-    await db.gino.create_all()
+async def close_connection():
+    await DATABASE.pop_bind().close()

@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.9-alpine
 
 # Create and set the working directory.
 WORKDIR /usr/src/bot
@@ -10,9 +10,7 @@ ENV PIP_NO_CACHE_DIR=false \
     PIPENV_NOSPIN=1
 
 # Update system and install dependencies.
-RUN apt update && apt upgrade -y && apt install -y \
-    git \
-    libuv0.10-dev
+RUN apk add --no-cache gcc musl-dev make libffi-dev openssl-dev libuv postgresql-dev
 
 # Install pipenv.
 RUN pip install -U pipenv
@@ -24,6 +22,7 @@ RUN pipenv install --system --deploy
 # Copy source code last to optimize rebuilding speed of the image.
 COPY . .
 
-# Launch the bot application through pipenv.
+# Launch the bot application through pipenv and run database migrations.
 ENTRYPOINT ["pipenv"]
+CMD ["run", "migrations"]
 CMD ["run", "bot"]
