@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_USER: squadbot
+      POSTGRES_PASSWORD: squadbot
+      POSTGRES_DB: squadbot
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/bot:ro
+      - ./logs:/usr/src/bot/logs
+    tty: true
+    depends_on:
+      - postgres
+    environment:
+      DISCORD_PREFIXES: ${DISCORD_PREFIXES}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DATABASE_URL: postgresql+asyncpg://squadbot:squadbot@postgres:5432/squadbot
