@@ -16,11 +16,11 @@ RUN apk add --no-cache gcc musl-dev make libffi-dev openssl-dev libuv postgresql
 RUN pip install -U pipenv
 
 # Install bot dependencies.
-COPY Pipfile* .
+COPY Pipfile* ./
 RUN pipenv install --system --deploy
 
 # Copy source code last to optimize rebuilding speed of the image.
-COPY . .
+COPY ./ ./
 
 # Launch the bot application through pipenv and run database migrations.
 ENTRYPOINT ["pipenv"]
