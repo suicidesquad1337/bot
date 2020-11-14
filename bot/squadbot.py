@@ -1,12 +1,15 @@
 import discord
 from discord.ext import commands
+from gino import Gino
 
 from .utils import config
 
 
 class SquadBot(commands.Bot):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, db: Gino, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.db = db
 
     def run(self):
         super().run(config.get_token())
