@@ -17,7 +17,7 @@ class SquadBot(commands.Bot):
         super().run(config.get_token())
 
     async def on_ready(self):
-        print(f"Logged in as {self.user.name}")
+        print(f"Logged in as {self.user.name}#{self.user.discriminator}")
         print(f"ID: {self.user.id}")
 
     async def on_message(self, message: discord.Message):

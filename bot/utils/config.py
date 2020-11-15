@@ -11,4 +11,13 @@ def get_token() -> str:
 
 
 def get_database_url() -> str:
-    return os.getenv("DATABASE_URL")
+    if url := os.getenv("POSTGRES_DB_URL"):
+        return url
+    else:
+        return "postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}".format(
+            os.getenv("POSTGRES_USER"),
+            os.getenv("POSTGRES_PASSWORD"),
+            os.getenv("POSTGRES_HOST"),
+            os.getenv("POSTGRES_PORT"),
+            os.getenv("POSTGRES_DB"),
+        )
