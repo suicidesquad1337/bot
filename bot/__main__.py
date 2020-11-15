@@ -33,6 +33,7 @@ loop.run_until_complete(db.init_connection())
 
 # Instantiate and configure the bot instance.
 bot = SquadBot(
+    loop=loop,
     command_prefix=when_mentioned_or(*config.get_prefixes()),
     case_insensitive=True,
     max_messages=10_000,
