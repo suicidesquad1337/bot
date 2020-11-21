@@ -6,7 +6,7 @@ DATABASE = Gino()
 
 
 async def init_connection():
-    await DATABASE.set_bind(config.get_database_url())
+    await DATABASE.set_bind(config.construct_database_url())
 
 
 async def close_connection():

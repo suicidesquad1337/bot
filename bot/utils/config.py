@@ -1,23 +1,30 @@
-import os
-from typing import List
+from typing import Set
+
+from pydantic import BaseSettings, Field
 
 
-def get_prefixes() -> List[str]:
-    return os.getenv("DISCORD_PREFIXES").split(",")
+class Config(BaseSettings):
+    discord_auth_key: str = Field(..., env="DISCORD_TOKEN")
+    discord_prefixes: Set[str] = Field(["!"], env="DISCORD_PREFIXES")
+    postgres_user: str = Field(None, env="POSTGRES_USER")
+    postgres_password: str = Field(None, env="POSTGRES_PASSWORD")
+    postgres_db: str = Field(None, env="POSTGRES_DB")
+    postgres_host: str = Field(None, env="POSTGRES_HOST")
+    postgres_port: str = Field(None, env="POSTGRES_PORT")
+    postgres_db_url: str = Field(None, env="POSTGRES_DB_URL")
 
 
-def get_token() -> str:
-    return os.getenv("DISCORD_TOKEN")
+config = Config()
 
 
-def get_database_url() -> str:
-    if url := os.getenv("POSTGRES_DB_URL"):
+def construct_database_url() -> str:
+    if url := config.postgres_db_url:
         return url
     else:
         return "postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}".format(
-            os.getenv("POSTGRES_USER"),
-            os.getenv("POSTGRES_PASSWORD"),
-            os.getenv("POSTGRES_HOST"),
-            os.getenv("POSTGRES_PORT"),
-            os.getenv("POSTGRES_DB"),
+            config.postgres_user,
+            config.postgres_password,
+            config.postgres_host,
+            config.postgres_port,
+            config.postgres_db,
         )

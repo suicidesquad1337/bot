@@ -14,7 +14,7 @@ class SquadBot(commands.Bot):
         await super().close()
 
     def run(self):
-        super().run(config.get_token())
+        super().run(config.config.discord_auth_key)
 
     async def on_ready(self):
         # Initialize the database connection.
@@ -27,7 +27,6 @@ class SquadBot(commands.Bot):
         # Ignore messages sent by bots.
         if message.author.bot:
             return
-
         # Process bot commands in the message.
         ctx = await self.get_context(message)
         await self.invoke(ctx)

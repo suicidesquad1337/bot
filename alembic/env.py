@@ -21,7 +21,7 @@ from bot.utils import config as bot_config  # noqa
 config.set_section_option(
     config.config_ini_section,
     "DATABASE_URL",
-    bot_config.get_database_url().replace("+asyncpg", ""),
+    bot_config.construct_database_url().replace("+asyncpg", ""),
 )
 
 # add your model's MetaData object here

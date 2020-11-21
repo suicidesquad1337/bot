@@ -31,7 +31,7 @@ intents.integrations = False
 # Instantiate and configure the bot instance.
 bot = SquadBot(
     loop=loop,
-    command_prefix=when_mentioned_or(*config.get_prefixes()),
+    command_prefix=when_mentioned_or(*config.config.discord_prefixes),
     case_insensitive=True,
     max_messages=10_000,
     intents=intents,
