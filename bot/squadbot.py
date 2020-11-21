@@ -14,7 +14,7 @@ class SquadBot(commands.Bot):
         await super().close()
 
     def run(self):
-        super().run(BOT_CONFIG.config.discord_token)
+        super().run(BOT_CONFIG.discord_token)
 
     async def on_ready(self):
         # Initialize the database connection.
