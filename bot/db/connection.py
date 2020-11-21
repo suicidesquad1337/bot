@@ -1,12 +1,12 @@
 from gino import Gino
 
-from ..utils import config
+from ..utils.config import BOT_CONFIG
 
 DATABASE = Gino()
 
 
 async def init_connection():
-    await DATABASE.set_bind(config.construct_database_url())
+    await DATABASE.set_bind(BOT_CONFIG.construct_database_url())
 
 
 async def close_connection():

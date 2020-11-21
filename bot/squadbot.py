@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 from . import db
-from .utils import config
+from .utils.config import BOT_CONFIG
 
 
 class SquadBot(commands.Bot):
@@ -14,7 +14,7 @@ class SquadBot(commands.Bot):
         await super().close()
 
     def run(self):
-        super().run(config.config.discord_auth_key)
+        super().run(BOT_CONFIG.config.discord_token)
 
     async def on_ready(self):
         # Initialize the database connection.

@@ -5,7 +5,7 @@ import discord
 from discord.ext.commands import when_mentioned_or
 
 from . import SquadBot
-from .utils import config
+from .utils.config import BOT_CONFIG
 
 try:
     import uvloop
@@ -31,7 +31,7 @@ intents.integrations = False
 # Instantiate and configure the bot instance.
 bot = SquadBot(
     loop=loop,
-    command_prefix=when_mentioned_or(*config.config.discord_prefixes),
+    command_prefix=when_mentioned_or(*BOT_CONFIG.discord_prefixes),
     case_insensitive=True,
     max_messages=10_000,
     intents=intents,
