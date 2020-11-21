@@ -17,6 +17,9 @@ class SquadBot(commands.Bot):
         super().run(config.get_token())
 
     async def on_ready(self):
+        # Initialize the database connection.
+        await db.init_connection()
+
         print(f"Logged in as {self.user.name}#{self.user.discriminator}")
         print(f"ID: {self.user.id}")
 

@@ -4,7 +4,7 @@ from pathlib import Path
 import discord
 from discord.ext.commands import when_mentioned_or
 
-from . import SquadBot, db
+from . import SquadBot
 from .utils import config
 
 try:
@@ -27,9 +27,6 @@ intents.dm_typing = False
 intents.invites = False
 intents.webhooks = False
 intents.integrations = False
-
-# Initialize the database connection.
-loop.run_until_complete(db.init_connection())
 
 # Instantiate and configure the bot instance.
 bot = SquadBot(
