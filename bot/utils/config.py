@@ -12,6 +12,17 @@ class Config(BaseSettings):
     postgres_host: str = Field(None, env="POSTGRES_HOST")
     postgres_port: str = Field(None, env="POSTGRES_PORT")
     postgres_db_url: str = Field(None, env="POSTGRES_DB_URL")
+    smaland_channel_id: int = Field(..., env="SMALAND_CHANNEL_ID")
+    smaland_max_autistenpunkte: int = Field(..., env="SMALAND_MAX_AUTISTENPUNKTE")
+    smaland_autistenpunkte_reset_interval: int = Field(
+        3600, env="SMALAND_AUTISTENPUNKTE_RESET_INTERVAL"
+    )
+    smaland_autistenpunkte_ignored_channels: Set[int] = Field(
+        ..., env="SMALAND_AUTISTENPUNKTE_IGNORED_CHANNELS"
+    )
+    smaland_banned_custom_emotes: Set[str] = Field(
+        None, env="SMALAND_BANNED_CUSTOM_EMOTES"
+    )
 
     def construct_database_url(self) -> str:
         if url := self.postgres_db_url:

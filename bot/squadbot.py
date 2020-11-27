@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 from . import db
+from .cogs.autistenchecker import Autistenchecker
 from .utils.config import BOT_CONFIG
 
 
@@ -22,6 +23,7 @@ class SquadBot(commands.Bot):
 
         print(f"Logged in as {self.user.name}#{self.user.discriminator}")
         print(f"ID: {self.user.id}")
+        self.add_cog(Autistenchecker(self))
 
     async def on_message(self, message: discord.Message):
         # Ignore messages sent by bots.
