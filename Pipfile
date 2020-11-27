@@ -16,6 +16,7 @@ gino = "~=1.0.1"
 psycopg2 = "*"
 uvloop = { version = "~=0.14.0", sys_platform = "!= 'win32'" }
 pydantic = "*"
+emojis = "*"
 
 [pipenv]
 allow_prereleases = true
