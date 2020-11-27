@@ -21,7 +21,7 @@ class Config(BaseSettings):
         ..., env="SMALAND_AUTISTENPUNKTE_IGNORED_CHANNELS"
     )
     smaland_banned_custom_emotes: Set[str] = Field(
-        None, env="SMALAND_BANNED_CUSTOM_EMOTES"
+        [], env="SMALAND_BANNED_CUSTOM_EMOTES"
     )
 
     def construct_database_url(self) -> str:
