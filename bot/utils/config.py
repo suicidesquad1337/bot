@@ -18,7 +18,7 @@ class Config(BaseSettings):
         3600, env="SMALAND_AUTISTENPUNKTE_RESET_INTERVAL"
     )
     smaland_autistenpunkte_ignored_channels: Set[int] = Field(
-        ..., env="SMALAND_AUTISTENPUNKTE_IGNORED_CHANNELS"
+        [], env="SMALAND_AUTISTENPUNKTE_IGNORED_CHANNELS"
     )
     smaland_banned_custom_emotes: Set[str] = Field(
         [], env="SMALAND_BANNED_CUSTOM_EMOTES"

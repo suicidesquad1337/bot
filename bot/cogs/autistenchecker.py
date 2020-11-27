@@ -14,7 +14,6 @@ class Autistenchecker(commands.Cog):
         total_found = 0
         for emote in BOT_CONFIG.smaland_banned_custom_emotes:
             total_found += msg.content.count(emote)
-
         return total_found
 
     @commands.Cog.listener()
