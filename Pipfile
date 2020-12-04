@@ -13,10 +13,11 @@ pre-commit = "*"
 alembic = "~=1.4.3"
 "discord.py" = "~=1.5.1"
 gino = "~=1.0.1"
-psycopg2 = "*"
+psycopg2-binary = "*"
 uvloop = { version = "~=0.14.0", sys_platform = "!= 'win32'" }
 pydantic = "*"
 emojis = "*"
+aiohttp = "*"
 
 [pipenv]
 allow_prereleases = true
