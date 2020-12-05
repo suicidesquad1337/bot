@@ -1,6 +1,7 @@
 import discord
 import random
 from discord.ext import commands
+from discord.ext.commands import BadArgument, MissingRequiredArgument
 import aiohttp
 
 class MiscCommands(commands.Cog):
@@ -15,12 +16,17 @@ class MiscCommands(commands.Cog):
         """ Chooses a random boolean """
         await ctx.send(f"Here you go: {random.random() > 0.5}") # https://stackoverflow.com/questions/6824681/get-a-random-boolean-in-python because its fast (I think)
 
-    @random.command(name="choice", aliases=["c"]) # TODO: Errors when args == 0
+    @random.command(name="choice", aliases=["c"])
     async def random_choice(self, ctx, *, args):
         """ Chooses something random """
         if not len(args):
             await ctx.send("Pls specify a argument!")
         await ctx.send(f"Here you go: {random.choice(args.split(' '))}")
+
+    @random_choice.error
+    async def random_choice_error(self, ctx, err):
+        if isinstance(err, BadArgument) or isinstance(err, MissingRequiredArgument):
+            await ctx.send("Pls specify some arguments!")
 
     @random.command(name="dog")
     async def random_cat_picture(self, ctx):
