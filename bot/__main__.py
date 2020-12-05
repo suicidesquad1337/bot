@@ -4,8 +4,8 @@ from pathlib import Path
 import discord
 from discord.ext.commands import when_mentioned_or
 
-from . import SquadBot, db
-from .utils import config
+from . import SquadBot
+from .utils.config import BOT_CONFIG
 
 try:
     import uvloop
@@ -28,13 +28,10 @@ intents.invites = False
 intents.webhooks = False
 intents.integrations = False
 
-# Initialize the database connection.
-loop.run_until_complete(db.init_connection())
-
 # Instantiate and configure the bot instance.
 bot = SquadBot(
     loop=loop,
-    command_prefix=when_mentioned_or(*config.get_prefixes()),
+    command_prefix=when_mentioned_or(*BOT_CONFIG.discord_prefixes),
     case_insensitive=True,
     max_messages=10_000,
     intents=intents,

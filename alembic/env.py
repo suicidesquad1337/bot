@@ -16,21 +16,19 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 fileConfig(config.config_file_name)
 
 # Configure the environment for sqlalchemy.url formatting.
-from bot.utils import config as bot_config  # noqa
+from bot.utils.config import BOT_CONFIG  # noqa
 
 config.set_section_option(
     config.config_ini_section,
     "DATABASE_URL",
-    bot_config.get_database_url().replace("+asyncpg", ""),
+    BOT_CONFIG.construct_database_url().replace("+asyncpg", ""),
 )
 
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from bot.db.connection import DATABASE  # noqa
-
-target_metadata = DATABASE
+from bot.db.connection import DATABASE as target_metadata  # noqa
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
