@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3fb96a0776091c7c604a58b379d585188a76dae3efaba91faee8537eb0074a4e"
+            "sha256": "77defb27662a0bcc07ea7cd37899d513224240c046661c66bba7af2e8c213de3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -136,6 +136,22 @@
                 "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"
             ],
             "version": "==3.0.4"
+        },
+        "colorama": {
+            "hashes": [
+                "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b",
+                "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"
+            ],
+            "markers": "sys_platform == 'win32'",
+            "version": "==0.4.4"
+        },
+        "colorlog": {
+            "hashes": [
+                "sha256:0a9dcdba6cab68e8a768448b418a858d73c52b37b6e8dea2568296faece393bd",
+                "sha256:18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251"
+            ],
+            "index": "pypi",
+            "version": "==4.7.2"
         },
         "discord.py": {
             "hashes": [
