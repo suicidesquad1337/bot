@@ -10,12 +10,13 @@ isort = "*"
 pre-commit = "*"
 
 [packages]
+aiodns = "~= 2.0.0"
 alembic = "~=1.4.3"
 "discord.py" = "~=1.5.1"
 gino = "~=1.0.1"
 psycopg2 = "*"
 uvloop = { version = "~=0.14.0", sys_platform = "!= 'win32'" }
-pydantic = "*"
+pydantic = "~= 1.7.3"
 
 [pipenv]
 allow_prereleases = true

@@ -4,8 +4,9 @@ from pydantic import BaseSettings, Field
 
 
 class Config(BaseSettings):
-    discord_token: str = Field(..., env="DISCORD_TOKEN")
     discord_prefixes: Set[str] = Field(["!"], env="DISCORD_PREFIXES")
+    discord_token: str = Field(..., env="DISCORD_TOKEN")
+
     postgres_user: str = Field(None, env="POSTGRES_USER")
     postgres_password: str = Field(None, env="POSTGRES_PASSWORD")
     postgres_db: str = Field(None, env="POSTGRES_DB")
