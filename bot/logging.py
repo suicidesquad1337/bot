@@ -21,15 +21,16 @@ def log(stream: bool = False):
 
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    formatter = colorlog.ColoredFormatter(LOG_FORMAT, DATE_FMT, STYLE)
 
     file_handler = logging.FileHandler(LOG_DIR / "bot.log", encoding="utf-8")
-    file_handler.setFormatter(formatter)
+    file_handler.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FMT, STYLE))
     logger.addHandler(file_handler)
 
     if stream:
         stream_handler = logging.StreamHandler()
-        stream_handler.setFormatter(formatter)
+        stream_handler.setFormatter(
+            colorlog.ColoredFormatter(LOG_FORMAT, DATE_FMT, STYLE)
+        )
         logger.addHandler(stream_handler)
 
     try:
