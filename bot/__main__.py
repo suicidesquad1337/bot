@@ -5,6 +5,7 @@ import discord
 from discord.ext.commands import when_mentioned_or
 
 from . import SquadBot
+from .logging import log
 from .utils.config import BOT_CONFIG
 
 try:
@@ -37,4 +38,8 @@ bot = SquadBot(
     intents=intents,
 )
 
-bot.run()
+with log(True):
+    try:
+        bot.run()
+    except KeyboardInterrupt:
+        loop.create_task(bot.logout())

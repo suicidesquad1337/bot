@@ -1,3 +1,4 @@
+import logging
 import socket
 
 import aiohttp
@@ -7,12 +8,14 @@ from discord.ext import commands
 from . import db
 from .utils.config import BOT_CONFIG
 
+logger = logging.getLogger(__name__)
+
 
 class SquadBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._resolver = aiohttp.AsyncResolver()
+        self._resolver = aiohttp.AsyncResolver(self.loop)
         self._connector = aiohttp.TCPConnector(
             resolver=self._resolver,
             family=socket.AF_INET,
@@ -31,12 +34,13 @@ class SquadBot(commands.Bot):
     async def on_ready(self):
         await db.init_connection()
 
-        print(f"Logged in as {self.user.name}#{self.user.discriminator}")
-        print(f"ID: {self.user.id}")
+        logger.info(f"Logged in as {self.user}")
+        logger.info(f"ID: {self.user.id}")
 
     async def on_message(self, message: discord.Message):
         if message.author.bot:
             return
 
         ctx = await self.get_context(message)
-        await self.invoke(ctx)
+        if ctx.command:
+            await self.invoke(ctx)
