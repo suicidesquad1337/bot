@@ -5,7 +5,7 @@ from bot.db import connection
 from bot.utils.config import BOT_CONFIG
 
 app = FastAPI(
-    title="Spastenbude Bot",
+    title="Squadbot",
     description="The bot of vales suicide squad.",
     docs_url="/api/docs",
     redoc_url=None,
