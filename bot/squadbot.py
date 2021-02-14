@@ -15,7 +15,7 @@ class SquadBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._resolver = aiohttp.AsyncResolver()
+        self._resolver = aiohttp.AsyncResolver(self.loop)
         self._connector = aiohttp.TCPConnector(
             resolver=self._resolver,
             family=socket.AF_INET,
