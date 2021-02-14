@@ -4,6 +4,8 @@ from pathlib import Path
 
 import colorlog
 
+from .utils.config import BOT_CONFIG
+
 LOG_DIR = Path(__file__).parent.parent / "logs"
 
 STYLE = "{"
@@ -16,11 +18,10 @@ def log(stream: bool = False):
     LOG_DIR.mkdir(exist_ok=True)
 
     logging.getLogger("discord").setLevel(logging.WARNING)
-    logging.getLogger("websockets").setLevel(logging.WARNING)
     logging.getLogger("chardet").setLevel(logging.WARNING)
 
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG if BOT_CONFIG.debug_mode else logging.INFO)
     formatter = colorlog.ColoredFormatter(LOG_FORMAT, DATE_FMT, STYLE)
 
     file_handler = logging.FileHandler(LOG_DIR / "bot.log", encoding="utf-8")

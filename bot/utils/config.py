@@ -1,6 +1,9 @@
+import logging
 from typing import Set
 
 from pydantic import BaseSettings, Field
+
+logger = logging.getLogger(__name__)
 
 
 class Config(BaseSettings):
@@ -31,6 +34,7 @@ class Config(BaseSettings):
         "https://discord.com/api/oauth2/authorize", env="BACKEND_DISCORD_OAUTH2_URL"
     )
     backend_origins_max_age: int = Field(600, env="BACKEND_ORIGINS_MAX_AGE")
+    debug_mode: bool = Field(False, env="DEBUG_MODE")
 
     def construct_database_url(self) -> str:
         if url := self.postgres_db_url:
