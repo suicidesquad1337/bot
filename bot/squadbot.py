@@ -42,4 +42,5 @@ class SquadBot(commands.Bot):
             return
 
         ctx = await self.get_context(message)
-        await self.invoke(ctx)
+        if ctx.command:
+            await self.invoke(ctx)
