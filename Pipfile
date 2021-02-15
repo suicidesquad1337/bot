@@ -10,14 +10,19 @@ isort = "*"
 pre-commit = "*"
 
 [packages]
-aiodns = "~= 2.0.0"
+aiodns = "~=2.0.0"
 alembic = "~=1.4.3"
-colorlog = "~= 4.7.2"
+colorlog = "~=4.7.2"
 "discord.py" = "~=1.5.1"
 gino = "~=1.0.1"
 psycopg2-binary = "~=2.8.6"
 uvloop = { version = "~=0.14.0", sys_platform = "!= 'win32'" }
-pydantic = "~= 1.7.3"
+pydantic = "~=1.7.3"
+fastapi = "~=0.63.0"
+uvicorn = {version = "~=0.13.3", extras = ["standard"]}
+authlib = "~=0.15.3"
+itsdangerous = "~=1.1.0"
+httpx = "~=0.16.1"
 
 [pipenv]
 allow_prereleases = true
@@ -27,6 +32,7 @@ python_version = "3.9"
 
 [scripts]
 bot = "python -m bot"
+backend = "uvicorn backend.main:app --host $BACKEND_HOST --port $BACKEND_PORT"
 lint = "pre-commit run --all-files"
 precommit = "pre-commit install"
 migrations = "alembic upgrade head"

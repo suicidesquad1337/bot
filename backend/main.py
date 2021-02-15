@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from bot.db import connection
 from bot.utils.config import BOT_CONFIG
+
+from .v1 import oauth2
 
 app = FastAPI(
     title="Squadbot",
@@ -10,6 +13,7 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url=None,
     openapi_url="/api/openapi.json",
+    version="0.0.1",
 )
 
 app.add_middleware(
@@ -21,6 +25,10 @@ app.add_middleware(
     expose_headers=BOT_CONFIG.backend_origins_exposed_headers,
     max_age=BOT_CONFIG.backend_origins_max_age,
 )
+app.add_middleware(
+    SessionMiddleware, secret_key=BOT_CONFIG.backend_oauth2_session_secret
+)
+app.include_router(oauth2.router, prefix="/api/v1/oauth2")
 
 
 @app.on_event("startup")
