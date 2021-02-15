@@ -31,9 +31,11 @@ oauth.register(
 async def oauth2_callback(request: Request):
     try:
         token: OAuth2Token = await oauth.discord.authorize_access_token(request)
-        # check if the token has all required scopes and redirect to login page if not
-        if not set(token["scope"].split(" ")).issuperset(
-            set(BOT_CONFIG.discord_client_kwargs["scope"].split(" "))
+        # check if the token has all required scopes from the bot config
+        # and redirect to login page if not.
+        if not all(
+            e in token["scope"].split(" ")
+            for e in BOT_CONFIG.discord_client_kwargs["scope"].split(" ")
         ):
             return RedirectResponse(url=request.url_for("prepare_oauth2"))
 
