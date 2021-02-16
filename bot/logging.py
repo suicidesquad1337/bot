@@ -4,6 +4,8 @@ from pathlib import Path
 
 import colorlog
 
+from .utils.config import BOT_CONFIG
+
 LOG_DIR = Path(__file__).parent.parent / "logs"
 
 STYLE = "{"
@@ -20,7 +22,7 @@ def log(stream: bool = False):
     logging.getLogger("chardet").setLevel(logging.WARNING)
 
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG if BOT_CONFIG.debug_mode else logging.INFO)
 
     file_handler = logging.FileHandler(LOG_DIR / "bot.log", encoding="utf-8")
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FMT, STYLE))
