@@ -19,6 +19,8 @@ finally:
 
 ROOT = Path(__file__).parent.parent
 
+EXTENSIONS = ("bot.cogs.moderation",)
+
 
 # Configure Discord gateway intents which should be used by the bot.
 intents = discord.Intents.default()
@@ -37,6 +39,9 @@ bot = SquadBot(
     max_messages=10_000,
     intents=intents,
 )
+
+for extension in EXTENSIONS:
+    bot.load_extension(extension)
 
 with log(True):
     try:
