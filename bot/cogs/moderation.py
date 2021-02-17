@@ -2,6 +2,44 @@ import discord
 from discord.ext import commands
 
 from .. import SquadBot
+from ..utils.checks import is_kerkermeister
+
+
+class CheckedMember(commands.Converter):
+    async def convert(self, ctx, argument):
+        member = await commands.MemberConverter().convert(ctx, argument)
+        safe_name = await commands.clean_content(escape_markdown=True).convert(
+            ctx, str(member)
+        )
+
+        # Make sure that the targeted member for a moderation action is not
+        # the bot itself, the user of the command or the owner of the server.
+        if ctx.author.id == member.id:
+            raise commands.BadArgument(f"You cannot {ctx.command} yourself.")
+        elif member.id == ctx.bot.user.id:
+            raise commands.BadArgument(f"I'm afraid, I cannot {ctx.command} myself.")
+        elif is_kerkermeister(member):
+            raise commands.BadArgument(f"You cannot {ctx.command} a staff member.")
+        elif member == ctx.guild.owner:
+            raise commands.BadArgument(f"We won't {ctx.command} the server owner.")
+
+        # Check if the bot has the necessary permissions to execute the command
+        # and make sure that the role hierarchy does not forbid the action.
+        if member.top_role >= ctx.bot.top_role:
+            if ctx.author != ctx.guild.owner and member.top_role >= ctx.author.top_role:
+                _extra = "the two of us"
+            else:
+                _extra = "me"
+
+            raise commands.BadArgument(
+                f"{safe_name} has equal or higher privileges than {_extra}."
+            )
+        elif member.top_role >= ctx.author.top_role:
+            raise commands.BadArgument(
+                f"{safe_name} has equal or higher privileges than you."
+            )
+
+        return member
 
 
 class Moderation(commands.Cog):
@@ -13,7 +51,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
     async def kick(
-        self, ctx: commands.Context, target: discord.Member, *, reason: str = ""
+        self, ctx: commands.Context, target: CheckedMember, *, reason: str = ""
     ):
         """Kicks a member from the server."""
         safe_name = await commands.clean_content(escape_markdown=True).convert(
@@ -38,7 +76,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     async def ban(
-        self, ctx: commands.Context, target: discord.Member, *, reason: str = ""
+        self, ctx: commands.Context, target: CheckedMember, *, reason: str = ""
     ):
         """Bans a member from the server."""
         safe_name = await commands.clean_content(escape_markdown=True).convert(

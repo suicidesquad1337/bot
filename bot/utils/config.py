@@ -18,6 +18,9 @@ class Config(BaseSettings):
     discord_client_id: str = Field(..., env="DISCORD_CLIENT_ID")
     discord_client_secret: str = Field(..., env="DISCORD_CLIENT_SECRET")
 
+    # Significant roles of the guild.
+    kerkermeister_role_id: int = Field(..., env="KERKERMEISTER_ROLE_ID")
+
     # no need to change the following
     discord_access_token_url: str = Field(
         "https://discord.com/api/oauth2/token", env="DISCORD_ACCESS_TOKEN_URL"
