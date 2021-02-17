@@ -5,9 +5,9 @@ from .. import SquadBot
 from ..utils.checks import is_kerkermeister
 
 
-class CheckedMember(commands.Converter):
+class CheckedMember(commands.MemberConverter):
     async def convert(self, ctx, argument):
-        member = await commands.MemberConverter().convert(ctx, argument)
+        member = await super().convert(ctx, argument)
         safe_name = await commands.clean_content(escape_markdown=True).convert(
             ctx, str(member)
         )
