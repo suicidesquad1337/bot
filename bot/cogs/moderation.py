@@ -25,7 +25,7 @@ class CheckedMember(commands.MemberConverter):
 
         # Check if the bot has the necessary permissions to execute the command
         # and make sure that the role hierarchy does not forbid the action.
-        if member.top_role >= ctx.bot.top_role:
+        if member.top_role >= ctx.me.top_role:
             if ctx.author != ctx.guild.owner and member.top_role >= ctx.author.top_role:
                 _extra = "the two of us"
             else:
@@ -97,6 +97,27 @@ class Moderation(commands.Cog):
             reason=f"By {ctx.author} for {reason or 'no reason'}", delete_message_days=0
         )
         await ctx.send(f"⛔ {safe_name}")
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(ban_members=True)
+    @commands.bot_has_permissions(ban_members=True)
+    async def hackban(self, ctx: commands.Context, target_id: int, *, reason: str = ""):
+        """Bans a user through their ID without messaging them.
+
+        This command is intended to be used on users who are no members of the guild.
+        """
+        try:
+            target = await CheckedMember().convert(ctx, str(target_id))
+        except commands.MemberNotFound:
+            target = discord.Object(target_id)
+
+        await ctx.guild.ban(
+            target,
+            reason=f"By {ctx.author} for {reason or 'no reason'}",
+            delete_message_days=0,
+        )
+        await ctx.send(f"⛔ {target_id}")
 
 
 def setup(bot: SquadBot):
