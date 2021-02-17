@@ -119,6 +119,19 @@ class Moderation(commands.Cog):
         )
         await ctx.send(f"⛔ {target_id}")
 
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(ban_members=True)
+    @commands.bot_has_permissions(ban_members=True)
+    async def unban(self, ctx: commands.Context, target_id: int, *, reason: str = ""):
+        """Unbans a user through their ID."""
+        target = discord.Object(target_id)
+
+        await ctx.guild.unban(
+            target, reason=f"By {ctx.author} for {reason or 'no reason'}"
+        )
+        await ctx.send(f"✅ {target_id}")
+
 
 def setup(bot: SquadBot):
     bot.add_cog(Moderation(bot))
