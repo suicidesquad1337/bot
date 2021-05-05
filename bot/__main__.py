@@ -19,17 +19,31 @@ finally:
 
 ROOT = Path(__file__).parent.parent
 
-EXTENSIONS = ("bot.cogs.moderation",)
+EXTENSIONS = ("bot.cogs.moderation", "bot.cogs.invite_tracker")
 
 
 # Configure Discord gateway intents which should be used by the bot.
+# See https://discordpy.readthedocs.io/en/stable/api.html#discord.Intents
 intents = discord.Intents.default()
-intents.members = True
-intents.typing = False
+
+intents.bans = True
+intents.dm_messages = False
+intents.dm_reactions = False
 intents.dm_typing = False
-intents.invites = False
-intents.webhooks = False
+intents.emojis = False
+intents.guild_messages = True
+intents.guild_reactions = True
+intents.guild_typing = False
+intents.guilds = True
 intents.integrations = False
+intents.invites = True
+intents.members = True
+intents.messages = True
+intents.presences = False
+intents.reactions = False
+intents.typing = False
+intents.voice_states = False
+intents.webhooks = True
 
 # Instantiate and configure the bot instance.
 bot = SquadBot(
