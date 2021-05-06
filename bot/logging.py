@@ -20,7 +20,8 @@ def log(stream: bool = False):
 
     logging.getLogger("discord").setLevel(logging.WARNING)
     logging.getLogger("chardet").setLevel(logging.WARNING)
-    logging.getLogger("gino").setLevel(logging.DEBUG)
+    # Turn off the annoying gino SQL echo message
+    logging.getLogger("gino.engine._SAEngine").setLevel(logging.ERROR)
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG if BOT_CONFIG.debug_mode else logging.INFO)
 
