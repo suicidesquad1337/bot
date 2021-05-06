@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from datetime import datetime, timedelta
 
@@ -9,6 +10,8 @@ from ..squadbot import SquadBot
 
 logger = logging.getLogger(__name__)
 
+lock = asyncio.Lock()
+
 
 class InviteTracker(commands.Cog):
     def __init__(self, bot: SquadBot):
@@ -17,7 +20,8 @@ class InviteTracker(commands.Cog):
 
     async def _get_invites(self):
         for invite in await self.bot.guilds[0].invites():
-            self._invites[invite.id] = invite
+            async with lock:
+                self._invites[invite.id] = invite
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -27,23 +31,26 @@ class InviteTracker(commands.Cog):
     @commands.Cog.listener()
     async def on_invite_create(self, invite: discord.Invite):
         # add new invites to the record
-        self._invites[invite.id] = invite
+        async with lock:
+            self._invites[invite.id] = invite
 
     @commands.Cog.listener()
     async def on_invite_delete(self, invite: discord.Invite):
         # remove deleted invites from the record
-        self._invites.pop(invite.id)
+        async with lock:
+            self._invites.pop(invite.id)
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
         # query the saved invites before the user joined the server (old invite count).
         try:
-            invite: discord.Invite = next(
-                filter(
-                    lambda i: i.uses > self._invites[i.id].uses,
-                    await member.guild.invites(),
+            async with lock:
+                invite: discord.Invite = next(
+                    filter(
+                        lambda i: i.uses > self._invites[i.id].uses,
+                        await member.guild.invites(),
+                    )
                 )
-            )
         except StopIteration:
             # no invite found.
             await member.kick(
@@ -77,7 +84,8 @@ member(s) by using the ``revoke`` command."""
                     # Invite is already deleted (for some reason lol).
                     logger.warning("Failed to delete invite (maybe already deleted).")
                 # Remove invite from local "cache"
-                self._invites.pop(invite.id)
+                async with lock:
+                    self._invites.pop(invite.id)
 
     # remove members invited by the inviter with ``inviter_id``
     async def remove_invited_members(self, inviter_id: int):
