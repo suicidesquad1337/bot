@@ -132,9 +132,7 @@ member(s) by using the ``revoke`` command."""
             finally:
                 await invitedMember.delete()
         else:
-            logging.warning(
-                f"Failed to climb the invitation tree for {invitedMember.member_id}"
-            )
+            logging.warning(f"Failed to climb the invitation tree for {member.id}")
 
 
 def setup(bot: SquadBot):
