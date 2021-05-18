@@ -61,14 +61,13 @@ class InviteTracker(commands.Cog):
                 await invite.inviter.send(
                     f"""{member} used your invite ``{invite.id}`` to join \
 {member.guild.name}. You can revoke the invite and therefore kick the \
-member(s) by using the ``revoke`` command."""
+member(s) by using the ``invite revoke`` command."""
                 )
             except discord.Forbidden:
                 # Inviter has disabled dms or blocked the bot
                 pass
             await InvitedMember.create(
-                member_id=member.id,
-                inviter=invite.inviter.id,
+                member_id=member.id, inviter=invite.inviter.id, invite=invite.id
             )
         await self._get_invites()
 
@@ -88,7 +87,9 @@ member(s) by using the ``revoke`` command."""
                     self._invites.pop(invite.id)
 
     # remove members invited by the inviter with ``inviter_id``
-    async def remove_invited_members(self, inviter_id: int):
+    async def remove_invited_members(self, inviter_id: int, min_age: datetime = None):
+        if not min_age:
+            min_age = datetime.utcnow() - timedelta(days=1)
         # climb the tree
         # This could lead to big I/O both on the database and the discord api.
         for i in await InvitedMember.query.where(
@@ -98,17 +99,17 @@ member(s) by using the ``revoke`` command."""
             member: discord.Member = self.bot.guilds[0].get_member(i.member_id)
             # If the user is on the server (a member), proceed
             if member:
-                # Check if the user is a day or longer on the server
-                if member.joined_at > (datetime.utcnow() - timedelta(days=1)):
+                # Check if the user is longer than required on the server
+                if member.joined_at > min_age:
                     # if less, kick him
                     await member.kick(
                         reason=f"""Inviter ({inviter_id}) left the server\
- and the user was less than a day on the server."""
+ and the user was less than the required time to be independent on the server."""
                     )
                     # ... and delete all their invites
                     await self.delete_invites(member.id)
                     # ... and further climb the tree
-                    await self.remove_invited_members(i.member_id)
+                    await self.remove_invited_members(i.member_id, min_age)
                     # ... and delete the relation from the database
                     await i.delete()
 
@@ -133,6 +134,95 @@ member(s) by using the ``revoke`` command."""
                 await invitedMember.delete()
         else:
             logging.warning(f"Failed to climb the invitation tree for {member.id}")
+
+    @commands.guild_only()
+    @commands.group(name="invite", aliases=["i"])
+    async def invite(self, ctx: commands.Context):
+        """Manage invites"""
+        # This is only used to create a command group
+        pass
+
+    @commands.guild_only()
+    @invite.command(name="revoke", aliases=["r"])
+    async def revoke_invite(
+        self, ctx: commands.Context, invite: discord.Invite, kick_users: bool = False
+    ):
+        """Revoke an invite created by you. Optionally kick all members who used it."""
+        # Check if the message author actually created this invite
+        if invite.inviter == ctx.author:
+            # Delete the invite
+            await invite.delete(reason=f"Requested by {ctx.author}.")
+            if kick_users:
+                # If kick_users is True, kick members who used this invite.
+                await self.remove_invited_members(ctx.author.id)
+                await ctx.send(f"Revoked invite {invite.id} and kicked users.")
+            else:
+                await ctx.send(f"Revoked invite {invite.id}.")
+        else:
+            # If they did not, delete the invite asap so no other user can grab it.
+            await ctx.message.delete()
+
+    @commands.guild_only()
+    @invite.command(name="list", aliases=["ls", "l"])
+    async def list_invites(self, ctx: commands.Context):
+        invites: [discord.Invite] = []
+        """Let the bot send you a DM with all your known invites."""
+        for invite in await ctx.guild.invites():
+            # Loop over all invites and check if the invite creator is the message
+            # author and if so add them to the list
+            if invite.inviter == ctx.author:
+                invites.append(invite)
+        invites_msg = ""
+        for invite in invites:
+            # Format the message ``<invite> ``
+            invites_msg += f"{invite.id} "
+        try:
+            # Send the author a DM with they invites so we don't leak them in the public
+            await ctx.author.send(
+                f"You have a total of {len(invites)} invite(s)\n{invites_msg}"
+            )
+        # User has disabled DMs.
+        except discord.Forbidden:
+            await ctx.send("Please enable DMs.")
+
+    @commands.guild_only()
+    @invite.command(name="kick", aliases=["k"])
+    async def kick_member(
+        self,
+        ctx: commands.Context,
+        member: discord.Member,
+        climb_tree: bool = False,
+        revoke_invite: bool = True,
+        *,
+        reason: str = None,
+    ):
+        """Kick a member you have invited."""
+        if member.joined_at < (datetime.utcnow() - timedelta(days=270)):
+            await ctx.send("Member is independent from you.")
+            return
+        # Load the member from the database
+        if invitedMember := await InvitedMember.get(member.id):
+            # Check if the author actually invited the member
+            if invitedMember.inviter == ctx.author.id:
+                # Kick 'em
+                await ctx.guild.kick(
+                    member,
+                    reason=f"{ctx.author} revoked invite for \
+                this user for {reason or 'no reason'}.",
+                )
+                await ctx.send(f"Kicked member {member}")
+                if climb_tree:
+                    # Kick all members who the member invited. Ignoring time.
+                    await self.remove_invited_members(member.id, datetime.min)
+                if revoke_invite:
+                    for invite in await ctx.guild.invites():
+                        # Delete the invite used by the member to join so they can't
+                        # rejoin with the same invite.
+                        if invite.id == invitedMember.invite:
+                            await invite.delete()
+                            break
+            else:
+                raise commands.BadArgument("Not invited by you!")
 
 
 def setup(bot: SquadBot):
