@@ -19,7 +19,7 @@ finally:
 
 ROOT = Path(__file__).parent.parent
 
-EXTENSIONS = ("bot.cogs.moderation", "bot.cogs.invite_tracker")
+EXTENSIONS = ("bot.cogs.moderation", "bot.cogs.invite_tracker", "bot.cogs.joined_at")
 
 
 # Configure Discord gateway intents which should be used by the bot.
