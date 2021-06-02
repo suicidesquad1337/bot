@@ -42,6 +42,10 @@ class InviteTracker(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
+        # Bots don't use invites, so we can't match one either.
+        if member.bot:
+            return
+
         # query the saved invites before the user joined the server (old invite count).
         try:
             async with lock:
