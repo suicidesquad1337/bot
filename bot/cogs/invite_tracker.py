@@ -16,7 +16,7 @@ lock = asyncio.Lock()
 class InviteTracker(commands.Cog):
     def __init__(self, bot: SquadBot):
         self.bot = bot
-        self._invites: {} = {}
+        self._invites: dict = {}
 
     async def _get_invites(self):
         for invite in await self.bot.guilds[0].invites():
@@ -44,6 +44,7 @@ class InviteTracker(commands.Cog):
     async def on_member_join(self, member: discord.Member):
         # Bots don't use invites, so we can't match one either.
         if member.bot:
+            logger.debug(f"Bot account {member.id} joined, no actions taken")
             return
 
         # query the saved invites before the user joined the server (old invite count).
@@ -84,7 +85,7 @@ member(s) by using the ``invite revoke`` command."""
                     # Delete the invite
                     await invite.delete()
                 except discord.NotFound:
-                    # Invite is already deleted (for some reason lol).
+                    # Invite is already deleted (for some reason (see issue #13)).
                     logger.warning("Failed to delete invite (maybe already deleted).")
                 # Remove invite from local "cache"
                 async with lock:
@@ -119,12 +120,14 @@ member(s) by using the ``invite revoke`` command."""
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: discord.Member):
-        # get all invites from the guild
-        for invite in await member.guild.invites():
-            # check if the member has the invite created
-            if invite.inviter == member:
-                # delete the invite if the case
-                await invite.delete()
+        # a bot can still create invites. Therefore we check if the bot member
+        # did create invites and apply the same rules as with normal members.
+        if member.bot:
+            await self.delete_invites(member.id)
+            await self.remove_invited_members(member.id)
+            # The bot itself is not in the database. We're done here.
+            logger.debug(f"Member remove event for bot account {member.id}")
+            return
 
         # check if the member is in the database (legacy and missed entries due to down
         # time
