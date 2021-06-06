@@ -231,6 +231,34 @@ member(s) by using the ``invite revoke`` command."""
             else:
                 raise commands.BadArgument("Not invited by you!")
 
+    @commands.guild_only()
+    @commands.has_permissions(manage_guild=True)
+    @invite.command(name="set", aliases=["s"])
+    async def set_inviter(
+        self,
+        ctx: commands.Context,
+        member: discord.Member,
+        inviter: discord.User,
+        invite: discord.Invite = None,
+    ):
+        """Manual set the inviter of a member (useful if the bot was offline)"""
+        # Use helper method to either set the inviter or update the inviter.
+        await InvitedMember.set_inviter_or_update(member.id, inviter.id, invite)
+        # Send reply
+        await ctx.send(f"Set {inviter} as inviter of {member}.")
+
+    @commands.guild_only()
+    @commands.has_permissions(manage_guild=True)
+    @invite.command(name="by", aliases=["b", "get", "g"])
+    async def get_inviter(self, ctx: commands.Context, member: discord.Member):
+        """Get the inviter of a member"""
+        if invitedMember := await InvitedMember.get(member.id):
+            await ctx.send(
+                f"{member} was invited by {self.bot.get_user(invitedMember.inviter)}."
+            )
+        else:
+            await ctx.send(f"{member} not found.")
+
 
 def setup(bot: SquadBot):
     bot.add_cog(InviteTracker(bot))
