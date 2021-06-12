@@ -26,6 +26,7 @@ httpx = ">=0.16.1,<1"
 gidgethub = ">=5.0.0,<6"
 aiohttp = ">=3.6.0,<4"
 gunicorn = ">=20.1.0,<21"
+websockets = ">=9.1"
 
 [pipenv]
 allow_prereleases = true
