@@ -312,11 +312,11 @@
         },
         "httpcore": {
             "hashes": [
-                "sha256:036f960468759e633574d7c121afba48af6419615d36ab8ede979f1ad6276fa3",
-                "sha256:369aa481b014cf046f7067fddd67d00560f2f00426e79569d99cb11245134af0"
+                "sha256:1105b8b73c025f23ff7c36468e4432226cbb959176eab66864b8e31c4ee27fa6",
+                "sha256:18b68ab86a3ccf3e7dc0f43598eaddcf472b602aba29f9aa6ab85fe2ada3980b"
             ],
-            "markers": "python_version >= '3.6'",
-            "version": "==0.13.7"
+            "markers": "python_version >= '3.7'",
+            "version": "==0.15.0"
         },
         "httptools": {
             "hashes": [
@@ -340,11 +340,11 @@
         },
         "httpx": {
             "hashes": [
-                "sha256:0a2651dd2b9d7662c70d12ada5c290abcf57373b9633515fe4baa9f62566086f",
-                "sha256:ad2e3db847be736edc4b272c4d5788790a7e5789ef132fc6b5fef8aeb9e9f6e0"
+                "sha256:42974f577483e1e932c3cdc3cd2303e883cbfba17fe228b0f63589764d7b9c4b",
+                "sha256:f28eac771ec9eb4866d3fb4ab65abd42d38c424739e80c08d8d20570de60b0ef"
             ],
             "index": "pypi",
-            "version": "==0.18.1"
+            "version": "==0.23.0"
         },
         "idna": {
             "hashes": [
@@ -596,13 +596,13 @@
         },
         "pyjwt": {
             "extras": [
-
+                "crypto"
             ],
             "hashes": [
                 "sha256:72d1d253f32dbd4f5c88eaf1fdc62f3a19f676ccbadb9dbc5d07e951b2b26daf",
                 "sha256:d42908208c699b3b973cbeb01a969ba6a96c821eefb1c5bfe4c390c01d67abba"
             ],
-            "index": "pypi",
+            "markers": "python_version >= '3.6'",
             "version": "==2.4.0"
         },
         "python-dateutil": {
@@ -960,11 +960,11 @@
         },
         "filelock": {
             "hashes": [
-                "sha256:b795f1b42a61bbf8ec7113c341dad679d772567b936fbd1bf43c9a238e673e20",
-                "sha256:c7b5fdb219b398a5b28c8e4c1893ef5f98ece6a38c6ab2c22e26ec161556fed6"
+                "sha256:37def7b658813cda163b56fc564cdc75e86d338246458c4c28ae84cabefa2404",
+                "sha256:3a0fd85166ad9dbab54c9aec96737b744106dc5f15c0b09a6744a445299fcf04"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.7.0"
+            "version": "==3.7.1"
         },
         "flake8": {
             "hashes": [
